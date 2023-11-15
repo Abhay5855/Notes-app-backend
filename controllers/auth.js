@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const expressJwt = require("express-jwt");
 const jwt = require("jsonwebtoken");
-const { authValidator } = require("../validations/auth");
+const { authValidator, loginValidator } = require("../validations/auth");
 
 //Register
 exports.Register = async (req, res) => {
@@ -46,7 +46,7 @@ exports.Register = async (req, res) => {
 exports.login = (req, res) => {
   const { email } = req.body;
 
-  const { error } = authValidator.validate(req.body);
+  const { error } = loginValidator.validate(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -67,10 +67,10 @@ exports.login = (req, res) => {
 
       res.cookie("token", token, { expire: new Date() + 9999 });
 
-      const { _id, userName, email } = user;
+      const { _id, email } = user;
       return res.json({
         token,
-        user: { _id, email, firstName, lastName },
+        user: { _id, email},
         userId: user._id,
       });
     })
@@ -91,3 +91,4 @@ exports.Logout = (req, res) => {
     message: "User logged out successfully",
   });
 };
+

@@ -20,6 +20,17 @@ const authValidator = Joi.object({
   lastName: Joi.string().required().min(5),
 });
 
+const loginValidator = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: false } })
+    .required()
+    .lowercase(),
+
+  password: Joi.string()
+    .required()
+});
+
 module.exports = {
   authValidator,
+  loginValidator
 };
