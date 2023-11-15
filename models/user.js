@@ -8,7 +8,14 @@ const { v4: uuidv4 } = require("uuid");
 
 const userSchema = new Schema(
   {
-    userName: {
+    firstName: {
+      type: String,
+      required: true,
+      maxlength: 32,
+      trim: true,
+    },
+    
+    lastName: {
       type: String,
       required: true,
       maxlength: 32,

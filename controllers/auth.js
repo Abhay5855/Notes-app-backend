@@ -1,37 +1,58 @@
 const User = require("../models/user");
 const expressJwt = require("express-jwt");
 const jwt = require("jsonwebtoken");
-
+const { authValidator } = require("../validations/auth");
 
 //Register
-exports.Register = (req, res) => {
+exports.Register = async (req, res) => {
   const user = new User(req.body);
 
-  user
-    .save()
-    .then(() => {
-      res.json({
-        email: user.email,
-        userName: user.userName,
-        id: user._id,
-      });
-    })
-    .catch((err) => {
-      if (err) {
-        return res.status(400).json({
-          error: "Unable to save user to the db",
-        });
-      }
+  const { error } = authValidator.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details[0].message,
     });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email: user.email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+
+    // Save new user to the DB
+    await user.save();
+
+    res.json({
+      email: user.email,
+      firstName : user.firstName,
+      lastName : user.lastName,
+      id: user._id,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: "Unable to save user to the db",
+    });
+  }
 };
 
 //Login
 
 exports.login = (req, res) => {
-  // adding the cookie
-  // find the user
+  const { email } = req.body;
 
-  const { email, password } = req.body;
+  const { error } = authValidator.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details[0].message,
+    });
+  }
 
   User.findOne({ email })
     .then((user) => {
@@ -42,18 +63,16 @@ exports.login = (req, res) => {
       }
 
       // create token
-     var token = jwt.sign({ _id: user._id }, "shhhhh");
+      var token = jwt.sign({ _id: user._id }, "shhhhh");
 
-     res.cookie("token", token, { expire: new Date() + 9999 });
+      res.cookie("token", token, { expire: new Date() + 9999 });
 
-     const { _id, userName, email } = user;
-    return res.json({
-      token,
-      user: { _id, email, userName},
-      userId: user._id,
-    });
-
-
+      const { _id, userName, email } = user;
+      return res.json({
+        token,
+        user: { _id, email, firstName, lastName },
+        userId: user._id,
+      });
     })
     .catch((err) => {
       if (err) {
@@ -64,14 +83,11 @@ exports.login = (req, res) => {
     });
 };
 
-
 exports.Logout = (req, res) => {
+  // clear cookie
+  res.clearCookie("token");
 
-        // clear cookie
-        res.clearCookie("token");
-
-        return res.json({
-
-           message : "User logged out successfully"
-        })
-}
+  return res.json({
+    message: "User logged out successfully",
+  });
+};
