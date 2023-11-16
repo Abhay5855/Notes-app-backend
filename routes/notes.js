@@ -1,16 +1,18 @@
 const express = require("express");
 const { isSignedin} = require("../middlewares/auth");
 const {getUserByID} = require("../controllers/user");
-const { createNote } = require("../controllers/notes");
+const { createNote, getNoteById, getNote } = require("../controllers/notes");
 const router = express.Router();
 
-//user- id retrive
-router.param("userId", getUserByID);
-
+//note- id retrive
+router.param("noteId", getNoteById);
 
 //create notes
+router.post("/create/note" , createNote);
 
-router.post("/create/product" , createNote);
+
+//get note by id
+router.get("/note/:noteId" , getNote);
 
 
 module.exports = router;
