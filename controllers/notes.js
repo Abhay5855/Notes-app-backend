@@ -30,6 +30,32 @@ exports.createNote = async (req, res) => {
 
 // delete notes - byID
 
+exports.deleteNote = (req, res) => {
+  const note = req.note;
+
+  console.log(note, "deleted note");
+  note
+    .deleteOne()
+    .then((result) => {
+      console.log(result, "number");
+      if (result.deletedCount === 1) {
+        res.json({
+          message: "Successfully deleted the note",
+          note: note, // You can still include the original note in the response if needed
+        });
+      } else {
+        res.status(400).json({
+          error: "Failed to delete the note",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Something went wrong",
+      });
+    });
+};
+
 // delete notes - all
 
 //get note by - id
@@ -38,12 +64,12 @@ exports.getNoteById = (req, res, next, id) => {
     .exec()
     .then((notes) => {
       if (!notes) {
-        return err.status(400).json({
+        return res.status(400).json({
           error: "note does not exist",
         });
       }
 
-      req.profile = notes;
+      req.note = notes;
       next();
     })
     .catch((err) => {
@@ -55,9 +81,9 @@ exports.getNoteById = (req, res, next, id) => {
 
 // get note
 exports.getNote = (req, res) => {
-     
-    return res.json(req.profile);
-     
-}
+  return res.json(req.note);
+};
+
+
 
 // update note - by id
