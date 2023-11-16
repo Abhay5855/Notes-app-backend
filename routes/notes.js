@@ -6,6 +6,7 @@ const {
   getNoteById,
   getNote,
   deleteNote,
+  updateNote,
 } = require("../controllers/notes");
 const router = express.Router();
 
@@ -22,8 +23,10 @@ router.post("/note/create/:userId", isSignedin, createNote);
 router.get("/note/:noteId", isSignedin, getNote);
 
 //delete note by id
-
 router.delete("/delete/note/:noteId/:userId", isSignedin, deleteNote);
+
+//update note
+router.put("/update/note/:noteId/:userId", isSignedin, updateNote);
 
 
 module.exports = router;

@@ -37,7 +37,6 @@ exports.deleteNote = (req, res) => {
   note
     .deleteOne()
     .then((result) => {
-      console.log(result, "number");
       if (result.deletedCount === 1) {
         res.json({
           message: "Successfully deleted the note",
@@ -84,6 +83,26 @@ exports.getNote = (req, res) => {
   return res.json(req.note);
 };
 
-
-
 // update note - by id
+exports.updateNote = async (req, res) => {
+  const note = req.note;
+
+  const { error } = notesValidator.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details[0].message,
+    });
+  }
+
+  try {
+    // Save the updated note
+    const updatedNote = await note.save();
+
+    res.json(updatedNote);
+  } catch (err) {
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
