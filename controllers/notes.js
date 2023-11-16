@@ -1,9 +1,19 @@
 const Notes = require("../models/notes");
+const { notesValidator } = require("../validations/notes");
 
 //create notes
 
 exports.createNote = async (req, res) => {
   let product = new Notes(req.body);
+
+
+  const {error} = notesValidator.validate(req.body);
+
+  if(error){
+    return res.status(400).json({
+        error: error.details[0].message,
+      });
+  }
 
   try {
     await product.save();
