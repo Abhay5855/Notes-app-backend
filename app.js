@@ -3,6 +3,7 @@ const express = require("express");
 const port = 8000;
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const noteRoutes = require("./routes/notes");
 const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -30,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", authRoutes);
 
 app.use("/api" , userRoutes);
+
+app.use("/api" , noteRoutes);
 
 app.listen(port, () => {
   console.log("db is running");
