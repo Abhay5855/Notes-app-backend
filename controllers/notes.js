@@ -107,28 +107,34 @@ exports.updateNote = async (req, res) => {
   }
 };
 
-
- // get all notes
- exports.getAllNotes = (req, res) => {
+// get all notes
+exports.getAllNotes = (req, res) => {
   const { searchQuery } = req.query;
 
-  const cleanedSearchQuery = searchQuery.replace(/"/g, '');
+  const cleanedSearchQuery = searchQuery.replace(/"/g, "");
 
-  const query = cleanedSearchQuery ? { title: { $regex: new RegExp(cleanedSearchQuery, 'i') } } : {};
+  const regexQuery = cleanedSearchQuery
+    ? new RegExp(cleanedSearchQuery, "i")
+    : "";
 
-  console.log(query, "query");
+  // Use $or to search in both title and content
+  const query = {
+    $or: [
+      { title: { $regex: regexQuery } },
+      { content: { $regex: regexQuery } },
+    ],
+  };
 
   Notes.find(query)
     .exec()
     .then((users) => {
       if (!users || users.length === 0) {
         return res.status(404).json({
-          error: "No users found",
+          error: "No notes found",
         });
       }
 
       const sanitizedResult = users.map((user) => {
-    
         return user;
       });
 
@@ -136,8 +142,7 @@ exports.updateNote = async (req, res) => {
     })
     .catch((err) => {
       return res.status(400).json({
-        error: "Unable to fetch notes",
+        error: "Unable to search notes",
       });
     });
 };
-
