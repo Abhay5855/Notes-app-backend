@@ -20,6 +20,7 @@ exports.createNote = async (req, res) => {
       title: product.title,
       content: product.content,
       id: product._id,
+      isPinned: product.isPinned,
     });
   } catch (err) {
     return res.status(400).json({
