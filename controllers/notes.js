@@ -146,3 +146,28 @@ exports.getAllNotes = (req, res) => {
       });
     });
 };
+
+//Pinned notes
+
+exports.addToPinnedNotes = async (req, res) => {
+  const { noteId } = req.params;
+
+  try {
+    //update according to the id
+    const note = await Notes.findByIdAndUpdate(
+      noteId,
+      { isPinned: true },
+      { new: true }
+    );
+
+    if (!note) {
+      return res.status(400).json({
+        error: "Failed to pin the note",
+      });
+    }
+
+    res.json(note);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
