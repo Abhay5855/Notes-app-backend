@@ -106,3 +106,38 @@ exports.updateNote = async (req, res) => {
     });
   }
 };
+
+
+ // get all notes
+ exports.getAllNotes = (req, res) => {
+  const { searchQuery } = req.query;
+
+  const cleanedSearchQuery = searchQuery.replace(/"/g, '');
+
+  const query = cleanedSearchQuery ? { title: { $regex: new RegExp(cleanedSearchQuery, 'i') } } : {};
+
+  console.log(query, "query");
+
+  Notes.find(query)
+    .exec()
+    .then((users) => {
+      if (!users || users.length === 0) {
+        return res.status(404).json({
+          error: "No users found",
+        });
+      }
+
+      const sanitizedResult = users.map((user) => {
+    
+        return user;
+      });
+
+      res.json(sanitizedResult);
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        error: "Unable to fetch notes",
+      });
+    });
+};
+

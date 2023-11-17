@@ -7,6 +7,8 @@ const {
   getNote,
   deleteNote,
   updateNote,
+  searchNotes,
+  getAllNotes,
 } = require("../controllers/notes");
 const router = express.Router();
 
@@ -28,5 +30,7 @@ router.delete("/delete/note/:noteId/:userId", isSignedin, deleteNote);
 //update note
 router.put("/update/note/:noteId/:userId", isSignedin, updateNote);
 
+//search all
+router.get("/notes", isSignedin, getAllNotes);
 
 module.exports = router;
