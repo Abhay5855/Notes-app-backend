@@ -19,18 +19,22 @@ router.param("noteId", getNoteById);
 router.param("userId", getUserByID);
 
 //create notes
-router.post("/note/create/:userId", isSignedin, createNote);
+router.post("/notes/:userId/create", isSignedin, createNote);
 
 //get note by id
-router.get("/note/:noteId", isSignedin, getNote);
+router.get("/notes/:noteId", isSignedin, getNote);
 
 //delete note by id
-router.delete("/delete/note/:noteId/:userId", isSignedin, deleteNote);
+router.delete("/notes/:noteId/:userId/delete", isSignedin, deleteNote);
 
 //update note
-router.put("/update/note/:noteId/:userId", isSignedin, updateNote);
+router.put("/notes/:noteId/:userId/update", isSignedin, updateNote);
 
 //search all
-router.get("/notes", isSignedin, getAllNotes);
+router.get("/notes/search", isSignedin, getAllNotes);
+
+// Pin notes
+
+router.patch("/notes/:noteId/pin", isSignedin);
 
 module.exports = router;
