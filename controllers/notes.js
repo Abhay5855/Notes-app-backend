@@ -3,7 +3,7 @@ const { notesValidator } = require("../validations/notes");
 
 //create notes
 exports.createNote = async (req, res) => {
-  let product = new Notes(req.body);
+  let note = new Notes(req.body);
 
   const { error } = notesValidator.validate(req.body);
 
@@ -14,7 +14,7 @@ exports.createNote = async (req, res) => {
   }
 
   try {
-    await product.save();
+    await note.save();
 
     res.json({
       title: product.title,
@@ -148,8 +148,7 @@ exports.getAllNotes = (req, res) => {
     });
 };
 
-//Pinned notes
-
+//add to pinned Notes
 exports.addToPinnedNotes = async (req, res) => {
   const { noteId } = req.params;
 
@@ -164,6 +163,52 @@ exports.addToPinnedNotes = async (req, res) => {
     if (!note) {
       return res.status(400).json({
         error: "Failed to pin the note",
+      });
+    }
+
+    res.json(note);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// get all pinned notes
+
+exports.getAllPinnedNotes = (req, res) => {
+  const { isPinned } = req.note;
+
+  Notes.find({ isPinned })
+    .then((note) => {
+      if (!note || note.length === 0) {
+        return res.status(400).json({
+          error: "Pinned notes does not exist",
+        });
+      }
+
+      res.json(note);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Pinned notes not found",
+      });
+    });
+};
+
+// Unpin the notes
+exports.removeToPinnedNotes = async (req, res) => {
+  const { noteId } = req.params;
+
+  try {
+    //update according to the id
+    const note = await Notes.findByIdAndUpdate(
+      noteId,
+      { isPinned: false },
+      { new: true }
+    );
+
+    if (!note) {
+      return res.status(400).json({
+        error: "Failed to remove the note",
       });
     }
 
