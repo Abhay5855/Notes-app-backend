@@ -172,28 +172,6 @@ exports.addToPinnedNotes = async (req, res) => {
   }
 };
 
-// get all pinned notes
-
-exports.getAllPinnedNotes = (req, res) => {
-  const { isPinned } = req.note;
-
-  Notes.find({ isPinned })
-    .then((note) => {
-      if (!note || note.length === 0) {
-        return res.status(400).json({
-          error: "Pinned notes does not exist",
-        });
-      }
-
-      res.json(note);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: "Pinned notes not found",
-      });
-    });
-};
-
 // Unpin the notes
 exports.removeToPinnedNotes = async (req, res) => {
   const { noteId } = req.params;
@@ -212,7 +190,7 @@ exports.removeToPinnedNotes = async (req, res) => {
       });
     }
 
-    res.json(note);
+    res.json(note.isPinned);
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }

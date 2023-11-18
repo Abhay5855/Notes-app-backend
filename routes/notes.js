@@ -42,7 +42,5 @@ router.patch("/notes/:noteId/pin", isSignedin, addToPinnedNotes);
 // Unpin;
 router.patch("/notes/:noteId/unpin", isSignedin, removeToPinnedNotes);
 
-//get all pinned notes
-router.get("/pin/notes/:noteId", isSignedin, getAllPinnedNotes);
 
 module.exports = router;
