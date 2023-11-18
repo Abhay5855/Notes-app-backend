@@ -10,7 +10,6 @@ const {
   searchNotes,
   getAllNotes,
   addToPinnedNotes,
-  getAllPinnedNotes,
   removeToPinnedNotes,
 } = require("../controllers/notes");
 const router = express.Router();
@@ -34,7 +33,7 @@ router.delete("/notes/:noteId/:userId/delete", isSignedin, deleteNote);
 router.put("/notes/:noteId/:userId/update", isSignedin, updateNote);
 
 //search all
-router.get("/notes/search", isSignedin, getAllNotes);
+router.get("/notes/search", isSignedin, searchNotes);
 
 // Pin notes
 router.patch("/notes/:noteId/pin", isSignedin, addToPinnedNotes);

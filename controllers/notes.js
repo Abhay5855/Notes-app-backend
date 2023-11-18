@@ -109,7 +109,7 @@ exports.updateNote = async (req, res) => {
 };
 
 // get all notes
-exports.getAllNotes = (req, res) => {
+exports.searchNotes = (req, res) => {
   const { searchQuery } = req.query;
 
   const cleanedSearchQuery = searchQuery.replace(/"/g, "");
