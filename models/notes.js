@@ -2,6 +2,8 @@ const moongoose = require("mongoose");
 
 const { Schema } = moongoose;
 
+const { ObjectId } = moongoose.Schema;
+
 const notesSchema = new Schema(
   {
     title: {
@@ -16,6 +18,10 @@ const notesSchema = new Schema(
     isPinned: {
       type: Boolean,
       default: false,
+    },
+    tag: {
+      ref: "Tag",
+      type: ObjectId,
     },
   },
   { timestamps: true }

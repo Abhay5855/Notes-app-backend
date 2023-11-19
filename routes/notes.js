@@ -8,7 +8,6 @@ const {
   deleteNote,
   updateNote,
   searchNotes,
-  getAllNotes,
   addToPinnedNotes,
   removeToPinnedNotes,
 } = require("../controllers/notes");
