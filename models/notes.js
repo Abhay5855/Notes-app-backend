@@ -4,6 +4,7 @@ const { Schema } = moongoose;
 
 const { ObjectId } = moongoose.Schema;
 
+
 const notesSchema = new Schema(
   {
     title: {
@@ -20,8 +21,8 @@ const notesSchema = new Schema(
       default: false,
     },
     tag: {
-      ref: "Tag",
       type: ObjectId,
+      ref: "Tag",
     },
   },
   { timestamps: true }

@@ -3,28 +3,31 @@ const { notesValidator } = require("../validations/notes");
 
 //create notes
 exports.createNote = async (req, res) => {
+  console.log(req.body, "req body");
   let note = new Notes(req.body);
 
-  const { error } = notesValidator.validate(req.body);
+  console.log(note);
 
-  if (error) {
-    return res.status(400).json({
-      error: error.details[0].message,
-    });
-  }
+  // const { error } = notesValidator.validate(req.body);
+
+  // if (error) {
+  //   return res.status(400).json({
+  //     error: error.details[0].message,
+  //   });
+  // }
 
   try {
     await note.save();
 
     res.json({
-      title: product.title,
-      content: product.content,
-      id: product._id,
-      isPinned: product.isPinned,
+      title: note.title,
+      content: note.content,
+      id: note._id,
+      isPinned: note.isPinned,
     });
   } catch (err) {
-    return res.status(400).json({
-      error: "Unable to save user to the db",
+    res.status(400).json({
+      error: "Unable to save note to the db",
     });
   }
 };

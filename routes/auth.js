@@ -12,6 +12,6 @@ router.post("/register" , Register);
 router.post("/login" , login);
 
 // Logout
-router.post("/logout" , Logout);
+router.post("/logout", isSignedin, Logout);
 
 module.exports = router;
