@@ -10,6 +10,7 @@ const {
   searchNotes,
   addToPinnedNotes,
   removeToPinnedNotes,
+  changeColor,
 } = require("../controllers/notes");
 const router = express.Router();
 
@@ -40,5 +41,6 @@ router.patch("/notes/:noteId/pin", isSignedin, addToPinnedNotes);
 // Unpin;
 router.patch("/notes/:noteId/unpin", isSignedin, removeToPinnedNotes);
 
-
+//change the color
+router.patch("/notes/:noteId/color", isSignedin, changeColor);
 module.exports = router;

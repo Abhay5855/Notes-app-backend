@@ -16,8 +16,8 @@ const authValidator = Joi.object({
         "Password must contain at least one uppercase letter, one number, and one special character",
     }),
 
-  firstName: Joi.string().required().min(5),
-  lastName: Joi.string().required().min(5),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
 });
 
 const loginValidator = Joi.object({

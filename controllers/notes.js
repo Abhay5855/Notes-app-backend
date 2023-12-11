@@ -3,18 +3,16 @@ const { notesValidator } = require("../validations/notes");
 
 //create notes
 exports.createNote = async (req, res) => {
-  console.log(req.body, "req body");
+
   let note = new Notes(req.body);
 
-  console.log(note);
+  const { error } = notesValidator.validate(req.body);
 
-  // const { error } = notesValidator.validate(req.body);
-
-  // if (error) {
-  //   return res.status(400).json({
-  //     error: error.details[0].message,
-  //   });
-  // }
+  if (error) {
+    return res.status(400).json({
+      error: error.details[0].message,
+    });
+  }
 
   try {
     await note.save();
@@ -24,6 +22,7 @@ exports.createNote = async (req, res) => {
       content: note.content,
       id: note._id,
       isPinned: note.isPinned,
+      color: note.color,
     });
   } catch (err) {
     res.status(400).json({
@@ -195,6 +194,31 @@ exports.removeToPinnedNotes = async (req, res) => {
 
     res.json(note.isPinned);
   } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//Update the color
+
+exports.changeColor = async (req, res) => {
+  const { noteId } = req.params;
+  const { color } = req.body;
+  try {
+    const updatedNote = await Notes.findByIdAndUpdate(
+      noteId,
+      { color },
+      { new: true }
+    );
+
+    if (!updatedNote) {
+      return res.status(400).json({
+        error: "Unable to change the color",
+      });
+    }
+
+    res.json({ color: updatedNote.color });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };

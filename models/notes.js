@@ -2,8 +2,6 @@ const moongoose = require("mongoose");
 
 const { Schema } = moongoose;
 
-const { ObjectId } = moongoose.Schema;
-
 
 const notesSchema = new Schema(
   {
@@ -11,7 +9,6 @@ const notesSchema = new Schema(
       type: String,
       required: true,
     },
-
     content: {
       type: String,
       required: true,
@@ -20,9 +17,9 @@ const notesSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    tag: {
-      type: ObjectId,
-      ref: "Tag",
+    color: {
+      type: String,
+      default: "#fff",
     },
   },
   { timestamps: true }

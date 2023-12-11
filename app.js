@@ -4,7 +4,6 @@ const port = 8000;
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const noteRoutes = require("./routes/notes");
-const tagRoutes = require("./routes/tags");
 
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -33,8 +32,6 @@ app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 
 app.use("/api", noteRoutes);
-
-app.use("/api", tagRoutes);
 
 app.listen(port, () => {
   console.log("db is running");

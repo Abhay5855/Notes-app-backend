@@ -1,13 +1,10 @@
-const { Schema, default: mongoose } = require("mongoose");
+const { Schema } = moongoose;
 
-const tagSchema = new Schema(
-  {
-    tag: {
-      type: String,
-      unique: true,
-    },
+const TagSchema = new Schema({
+  tag: {
+    type: String,
+    unique: true,
   },
-  { timestamps: true }
-);
+});
 
-module.exports = mongoose.model("Tag", tagSchema);
+module.exports = mongoose.model("Tag", TagSchema);

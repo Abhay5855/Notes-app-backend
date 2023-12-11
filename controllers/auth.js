@@ -29,12 +29,11 @@ exports.Register = async (req, res) => {
 
     res.json({
       email: user.email,
-      firstName : user.firstName,
-      lastName : user.lastName,
+      firstName: user.firstName,
+      lastName: user.lastName,
       id: user._id,
     });
   } catch (err) {
-    
     return res.status(400).json({
       error: "Unable to save user to the db",
     });
@@ -67,10 +66,10 @@ exports.login = (req, res) => {
 
       res.cookie("token", token, { expire: new Date() + 9999 });
 
-      const { _id, email } = user;
+      const { _id, email, firstName, lastName } = user;
       return res.json({
         token,
-        user: { _id, email},
+        user: { _id, email, firstName, lastName },
         userId: user._id,
       });
     })
@@ -91,4 +90,3 @@ exports.Logout = (req, res) => {
     message: "User logged out successfully",
   });
 };
-
