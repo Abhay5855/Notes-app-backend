@@ -1,9 +1,10 @@
 const Notes = require("../models/notes");
+const User = require("../models/user");
 const { notesValidator } = require("../validations/notes");
 
 //create notes
 exports.createNote = async (req, res) => {
-
+  console.log(req.params, "params");
   let note = new Notes(req.body);
 
   const { error } = notesValidator.validate(req.body);
@@ -15,6 +16,15 @@ exports.createNote = async (req, res) => {
   }
 
   try {
+    const user = await User.findById(req.params.userId);
+
+    note.user = user._id;
+    // Push the ObjectId of the created note to the user's notes array
+    user.notes.push(note._id);
+
+    console.log(user, "before saving");
+    console.log(note, "note saving");
+    await user.save();
     await note.save();
 
     res.json({
@@ -82,8 +92,29 @@ exports.getNoteById = (req, res, next, id) => {
 };
 
 // get note
-exports.getNote = (req, res) => {
-  return res.json(req.note);
+exports.getNote = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId).populate("notes");
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
+
+    const notes = user.notes;
+
+    console.log(notes, "notes");
+
+    return res.json(notes);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
 };
 
 // update note - by id
@@ -220,5 +251,24 @@ exports.changeColor = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+///get all notes
+exports.getAllNotes = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+    let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+
+    const notes = await Notes.findById({ id })
+      .sort([[sortBy, "asc"]])
+      .exec();
+
+    res.json(notes);
+  } catch (err) {
+    res.status(400).json({
+      error: "Failed to get the Products",
+    });
   }
 };

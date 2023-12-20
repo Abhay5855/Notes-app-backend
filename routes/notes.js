@@ -11,6 +11,7 @@ const {
   addToPinnedNotes,
   removeToPinnedNotes,
   changeColor,
+  getAllNotes,
 } = require("../controllers/notes");
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.param("userId", getUserByID);
 router.post("/notes/:userId/create", isSignedin, createNote);
 
 //get note by id
-router.get("/notes/:noteId", isSignedin, getNote);
+// router.get("/notes/:noteId", isSignedin, getNote);
 
 //delete note by id
 router.delete("/notes/:noteId/:userId/delete", isSignedin, deleteNote);
@@ -40,6 +41,8 @@ router.patch("/notes/:noteId/pin", isSignedin, addToPinnedNotes);
 
 // Unpin;
 router.patch("/notes/:noteId/unpin", isSignedin, removeToPinnedNotes);
+
+router.get("/notes/all/:userId", isSignedin, getNote);
 
 //change the color
 router.patch("/notes/:noteId/color", isSignedin, changeColor);

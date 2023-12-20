@@ -2,7 +2,7 @@ const moongoose = require("mongoose");
 
 const { Schema } = moongoose;
 
-
+const { ObjectId } = moongoose.Schema;
 const notesSchema = new Schema(
   {
     title: {
@@ -20,6 +20,11 @@ const notesSchema = new Schema(
     color: {
       type: String,
       default: "#fff",
+    },
+
+    user: {
+      type: ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

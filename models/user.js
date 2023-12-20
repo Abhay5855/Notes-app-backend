@@ -6,6 +6,8 @@ const crypto = require("crypto");
 
 const { v4: uuidv4 } = require("uuid");
 
+const { ObjectId } = moongoose.Schema;
+
 const userSchema = new Schema(
   {
     firstName: {
@@ -14,7 +16,7 @@ const userSchema = new Schema(
       maxlength: 32,
       trim: true,
     },
-    
+
     lastName: {
       type: String,
       required: true,
@@ -29,10 +31,12 @@ const userSchema = new Schema(
       trim: true,
     },
 
-    notes: {
-      type: Array,
-      default: [],
-    },
+    notes: [
+      {
+        type: ObjectId,
+        ref: "Notes",
+      },
+    ],
 
     //todo come later
     encrpt_password: {
