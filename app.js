@@ -30,11 +30,11 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(process.env.BASE_URL, authRoutes);
+app.use("/api", authRoutes);
 
-app.use(process.env.BASE_URL, userRoutes);
+app.use("/api", userRoutes);
 
-app.use(process.env.BASE_URL, noteRoutes);
+app.use("/api", noteRoutes);
 
 app.listen(port, () => {
   console.log("db is running");
