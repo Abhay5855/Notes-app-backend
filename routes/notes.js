@@ -1,6 +1,6 @@
 const express = require("express");
-const { isSignedin} = require("../middlewares/auth");
-const {getUserByID} = require("../controllers/user");
+const { isSignedin } = require("../middlewares/auth");
+const { getUserByID } = require("../controllers/user");
 const {
   createNote,
   getNoteById,
@@ -11,7 +11,6 @@ const {
   addToPinnedNotes,
   removeToPinnedNotes,
   changeColor,
-  getAllNotes,
 } = require("../controllers/notes");
 const router = express.Router();
 
