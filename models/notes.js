@@ -19,7 +19,7 @@ const notesSchema = new Schema(
     },
     color: {
       type: String,
-      default: "#fff",
+      default: "#202124",
     },
 
     user: {
