@@ -241,7 +241,7 @@ exports.changeColor = async (req, res) => {
       });
     }
 
-    res.json({ color: updatedNote.color });
+    res.json({ color });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
