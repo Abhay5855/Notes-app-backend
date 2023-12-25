@@ -228,6 +228,8 @@ exports.removeToPinnedNotes = async (req, res) => {
 exports.changeColor = async (req, res) => {
   const { noteId } = req.params;
   const { color } = req.body;
+
+  console.log(color, "color req");
   try {
     const updatedNote = await Notes.findByIdAndUpdate(
       noteId,
@@ -241,10 +243,12 @@ exports.changeColor = async (req, res) => {
       });
     }
 
-    updatedNote.color = color;
-    await updatedNote.save();
+    // updatedNote.color = color;
+    // await updatedNote.save();
 
-    res.json({ color: updatedNote.color });
+    console.log(updatedNote, "updated  note");
+
+    res.json(updatedNote);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
