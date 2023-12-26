@@ -199,6 +199,31 @@ exports.addToPinnedNotes = async (req, res) => {
   }
 };
 
+exports.addToLikedNotes = async (req, res) => {
+  const { noteId } = req.params;
+
+  try {
+    //update according to the id
+    const note = await Notes.findByIdAndUpdate(
+      noteId,
+      { liked: true },
+      { new: true }
+    );
+
+    if (!note) {
+      return res.status(400).json({
+        error: "Failed to add to favourites",
+      });
+    }
+
+    res.json({
+      liked: note.liked,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // Unpin the notes
 exports.removeToPinnedNotes = async (req, res) => {
   const { noteId } = req.params;
@@ -224,7 +249,6 @@ exports.removeToPinnedNotes = async (req, res) => {
 };
 
 //Update the color
-
 exports.changeColor = async (req, res) => {
   const { noteId } = req.params;
   const { color } = req.body;

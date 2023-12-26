@@ -22,6 +22,11 @@ const notesSchema = new Schema(
       default: "#202124",
     },
 
+    liked: {
+      type: Boolean,
+      default: false,
+    },
+
     user: {
       type: ObjectId,
       ref: "User",
