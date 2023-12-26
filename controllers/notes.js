@@ -204,11 +204,7 @@ exports.addToLikedNotes = async (req, res) => {
 
   try {
     //update according to the id
-    const note = await Notes.findByIdAndUpdate(
-      noteId,
-      { liked: true },
-      { new: true }
-    );
+    const note = await Notes.findById(noteId, { new: true });
 
     if (!note) {
       return res.status(400).json({
@@ -217,9 +213,10 @@ exports.addToLikedNotes = async (req, res) => {
     }
 
     note.liked = !note.liked;
+    const updatedNote = await note.save();
 
     res.json({
-      liked: note.liked,
+      liked: updatedNote.liked,
     });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
