@@ -203,17 +203,30 @@ exports.addToLikedNotes = async (req, res) => {
   const { noteId } = req.params;
 
   try {
-    //update according to the id
-    const note = await Notes.findById(noteId, { new: true });
+    // Find the current note
+    const note = await Notes.findById(noteId);
 
     if (!note) {
       return res.status(400).json({
-        error: "Failed to add to favourites",
+        error: "Note not found",
       });
     }
 
+    // Toggle the liked status
     note.liked = !note.liked;
-    const updatedNote = await note.save();
+
+    // Save the updated note
+    const updatedNote = await Notes.findOneAndUpdate(
+      { _id: noteId },
+      { liked: note.liked },
+      { new: true }
+    );
+
+    if (!updatedNote) {
+      return res.status(400).json({
+        error: "Failed to toggle liked status",
+      });
+    }
 
     res.json({
       liked: updatedNote.liked,
