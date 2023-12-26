@@ -216,8 +216,12 @@ exports.addToLikedNotes = async (req, res) => {
       });
     }
 
+    note.liked = !note.liked;
+
+    const updatedNote = await note.save();
+
     res.json({
-      liked: note.liked,
+      liked: updatedNote.liked,
     });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
