@@ -321,7 +321,7 @@ exports.uploadNote = upload.single("drawnImage"),
         });
       }
 
-      if (req.buffer) {
+      if (req.file) {
         notes.imageData = req.file.buffer;
         await notes.save();
 
