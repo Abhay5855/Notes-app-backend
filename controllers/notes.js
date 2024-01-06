@@ -308,7 +308,7 @@ exports.getAllNotes = async (req, res) => {
 
 //Upload the notes
 
-exports.uploadNote = upload.single("drawnImage"),
+exports.uploadNote = 
   async (req, res) => {
     const { noteId } = req.params;
 
@@ -321,14 +321,22 @@ exports.uploadNote = upload.single("drawnImage"),
         });
       }
 
-      if (req.file) {
-        notes.imageData = req.file.buffer;
+      if (req.body.imageData) {
+        // Decode base64 image data
+        const imageDataBuffer = Buffer.from(req.body.imageData, "base64");
+        // Set the imageData field in the note
+        notes.imageData = imageDataBuffer;
+  
+        // Save the note with the updated imageData
         await notes.save();
-
+  
         return res.json({
-          message: "Drawn note image uploaded successfully",
+          success: true,
+          message: "Image uploaded successfully",
         });
-      } else {
+      }
+      
+      else {
         return res.status(400).json({
           error: "No image file provided",
         });
