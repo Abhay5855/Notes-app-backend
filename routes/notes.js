@@ -53,5 +53,5 @@ router.get("/notes/all/:userId", isSignedin, getNote);
 router.patch("/notes/:noteId/color", isSignedin, changeColor);
 
 //Upload the drawn note
-router.post("/notes/:noteId/upload-file", isSignedin, uploadNote);
+router.post("/notes/:noteId/upload", isSignedin, uploadNote);
 module.exports = router;
