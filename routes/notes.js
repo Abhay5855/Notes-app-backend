@@ -13,6 +13,10 @@ const {
   changeColor,
   addToLikedNotes,
 } = require("../controllers/notes");
+
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const router = express.Router();
 
 //note  - id retrive
@@ -49,4 +53,7 @@ router.get("/notes/all/:userId", isSignedin, getNote);
 
 //change the color
 router.patch("/notes/:noteId/color", isSignedin, changeColor);
+
+//Upload the drawn note
+router.post("notes/:noteId/upload-file", isSignedin);
 module.exports = router;

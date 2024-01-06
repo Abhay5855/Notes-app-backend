@@ -31,6 +31,10 @@ const notesSchema = new Schema(
       type: ObjectId,
       ref: "User",
     },
+
+    imageData: {
+      type: Buffer,
+    },
   },
   { timestamps: true }
 );

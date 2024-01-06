@@ -1,6 +1,9 @@
 const Notes = require("../models/notes");
 const User = require("../models/user");
 const { notesValidator } = require("../validations/notes");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //create notes
 exports.createNote = async (req, res) => {
@@ -277,8 +280,6 @@ exports.changeColor = async (req, res) => {
       });
     }
 
-    console.log(updatedNote, "updated  note");
-
     res.json({ color: updatedNote.color });
   } catch (err) {
     console.log(err);
@@ -299,8 +300,42 @@ exports.getAllNotes = async (req, res) => {
 
     res.json(notes);
   } catch (err) {
-    res.status(400).json({
+    res.status(500).json({
       error: "Failed to get the Products",
     });
   }
 };
+
+//Upload the notes
+
+(exports.uploadNote = upload.single("drawnImage")),
+  async (req, res) => {
+    const { noteId } = req.params;
+
+    try {
+      const notes = await Notes.findById(noteId);
+
+      if (!notes) {
+        return res.status(400).json({
+          error: "Failed to upload the note",
+        });
+      }
+
+      if (req.buffer) {
+        notes.imageData = req.file.buffer;
+        await notes.save();
+
+        return res.json({
+          message: "Drawn note image uploaded successfully",
+        });
+      } else {
+        return res.status(400).json({
+          error: "No image file provided",
+        });
+      }
+    } catch (err) {
+      res.status(500).json({
+        error: "Failed to get upload the note",
+      });
+    }
+  };
