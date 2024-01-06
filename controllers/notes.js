@@ -308,42 +308,40 @@ exports.getAllNotes = async (req, res) => {
 
 //Upload the notes
 
-exports.uploadNote = 
-  async (req, res) => {
-    const { noteId } = req.params;
+exports.uploadNote = async (req, res) => {
+  const { noteId } = req.params;
 
-    try {
-      const notes = await Notes.findById(noteId);
+  try {
+    const note = await Notes.findById(noteId);
 
-      if (!notes) {
-        return res.status(400).json({
-          error: "Failed to upload the note",
-        });
-      }
-
-      if (req.body.imageData) {
-        // Decode base64 image data
-        const imageDataBuffer = Buffer.from(req.body.imageData, "base64");
-        // Set the imageData field in the note
-        notes.imageData = imageDataBuffer;
-  
-        // Save the note with the updated imageData
-        await notes.save();
-  
-        return res.json({
-          success: true,
-          message: "Image uploaded successfully",
-        });
-      }
-      
-      else {
-        return res.status(400).json({
-          error: "No image file provided",
-        });
-      }
-    } catch (err) {
-      res.status(500).json({
-        error: "Failed to get upload the note",
+    if (!note) {
+      return res.status(400).json({
+        error: "Note not found",
       });
     }
-  };
+
+    if (!req.body.imageData) {
+      return res.status(400).json({
+        error: "No image data provided in the request body",
+      });
+    }
+
+    // Decode base64 image data
+    const imageDataBuffer = Buffer.from(req.body.imageData, "base64");
+    // Set the imageData field in the note
+    note.imageData = imageDataBuffer;
+
+    // Save the note with the updated imageData
+    await note.save();
+
+    return res.json({
+      success: true,
+      message: "Image uploaded successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Failed to upload the note",
+    });
+  }
+};
