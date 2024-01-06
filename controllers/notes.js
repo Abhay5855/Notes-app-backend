@@ -308,7 +308,7 @@ exports.getAllNotes = async (req, res) => {
 
 //Upload the notes
 
-(exports.uploadNote = upload.single("drawnImage")),
+exports.uploadNote = upload.single("drawnImage"),
   async (req, res) => {
     const { noteId } = req.params;
 
