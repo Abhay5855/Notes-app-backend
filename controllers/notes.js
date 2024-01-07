@@ -2,8 +2,7 @@ const Notes = require("../models/notes");
 const User = require("../models/user");
 const { notesValidator } = require("../validations/notes");
 const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+
 
 //create notes
 exports.createNote = async (req, res) => {
@@ -308,7 +307,7 @@ exports.getAllNotes = async (req, res) => {
 
 //Upload the notes
 
-exports.uploadNote = upload.single("drawnImage"), async (req, res) => {
+exports.uploadNote = async (req, res) => {
  
   const { title, content, isPinned, color, liked, user } = req.body;
   const { noteId } = req.params;
