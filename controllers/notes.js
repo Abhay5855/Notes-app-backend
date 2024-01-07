@@ -309,22 +309,33 @@ exports.getAllNotes = async (req, res) => {
 //Upload the notes
 
 exports.uploadNote = upload.single("drawnImage"), async (req, res) => {
+ 
+  const { title, content, isPinned, color, liked, user } = req.body;
   const { noteId } = req.params;
-  const { drawnImage } = req.files;
-
   try {
-    const note = await Notes.findById(noteId);
+   
+    const imageData = req.file.buffer;
 
-    if (!note) {
-      return res.status(400).json({
-        error: "Note not found",
-      });
+    // Find the note by noteId
+    const existingNote = await Notes.findById(noteId);
+
+    if (!existingNote) {
+      return res.status(404).json({ error: "Note not found" });
     }
 
-    note.imageData = drawnImage.data; // Access the data property of the Buffer
-    await note.save();
+    // Update the existing note with the new drawn note data
+    existingNote.title = title;
+    existingNote.content = content;
+    existingNote.isPinned = isPinned;
+    existingNote.color = color;
+    existingNote.liked = liked;
+    existingNote.user = user;
+    existingNote.imageData = imageData;
 
-    res.json({ success: true, message: "Image saved successfully" });
+    await existingNote.save();
+
+    res.status(200).json({ message: "Drawn note saved successfully" });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({
