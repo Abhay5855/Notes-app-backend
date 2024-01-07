@@ -1,7 +1,6 @@
 const Notes = require("../models/notes");
 const User = require("../models/user");
 const { notesValidator } = require("../validations/notes");
-const multer = require("multer");
 
 
 //create notes
