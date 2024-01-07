@@ -308,8 +308,9 @@ exports.getAllNotes = async (req, res) => {
 
 //Upload the notes
 
-exports.uploadNote = async (req, res) => {
+exports.uploadNote = upload.single("drawnImage"), async (req, res) => {
   const { noteId } = req.params;
+  const { drawnImage } = req.files;
 
   try {
     const note = await Notes.findById(noteId);
@@ -320,24 +321,10 @@ exports.uploadNote = async (req, res) => {
       });
     }
 
-    if (!req.body.imageData) {
-      return res.status(400).json({
-        error: "No image data provided in the request body",
-      });
-    }
-
-    // Decode base64 image data
-    const imageDataBuffer = Buffer.from(req.body.imageData, "base64");
-    // Set the imageData field in the note
-    note.imageData = imageDataBuffer;
-
-    // Save the note with the updated imageData
+    note.imageData = drawnImage.data; // Access the data property of the Buffer
     await note.save();
 
-    return res.json({
-      success: true,
-      message: "Image uploaded successfully",
-    });
+    res.json({ success: true, message: "Image saved successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({
