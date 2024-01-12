@@ -13,6 +13,7 @@ const {
   changeColor,
   addToLikedNotes,
   uploadNote,
+  getImage,
 } = require("../controllers/notes");
 const multer = require("multer");
 const storage = multer.memoryStorage();
@@ -57,4 +58,7 @@ router.patch("/notes/:noteId/color", isSignedin, changeColor);
 
 //Upload the drawn note
 router.post("/notes/:noteId/upload", isSignedin, uploadNote);
+
+//fetch the note
+router.get("/notes/:noteId/getImage", isSignedin, getImage);
 module.exports = router;

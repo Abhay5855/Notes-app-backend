@@ -332,3 +332,23 @@ exports.uploadNote = async (req, res) => {
     });
   }
 };
+
+exports.getImage = async (req, res) => {
+  const { noteId } = req.params;
+  try {
+    const note = await Notes.findById(noteId);
+
+    if (!note || !note.imageData) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    const { data, contentType } = note.imageData;
+    const base64Image = `data:${contentType};base64,${data.toString("base64")}`;
+
+    res.json({ base64Image });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to fetch the note",
+    });
+  }
+};
