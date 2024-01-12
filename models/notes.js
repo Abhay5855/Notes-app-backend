@@ -33,7 +33,8 @@ const notesSchema = new Schema(
     },
 
     imageData: {
-      type: Buffer,
+      data: Buffer,
+      contentType: String,
     },
   },
   { timestamps: true }

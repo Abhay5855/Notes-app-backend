@@ -2,7 +2,6 @@ const Notes = require("../models/notes");
 const User = require("../models/user");
 const { notesValidator } = require("../validations/notes");
 
-
 //create notes
 exports.createNote = async (req, res) => {
   let note = new Notes(req.body);
@@ -307,33 +306,25 @@ exports.getAllNotes = async (req, res) => {
 //Upload the notes
 
 exports.uploadNote = async (req, res) => {
- 
-  const { title, content, isPinned, color, liked, user } = req.body;
   const { noteId } = req.params;
+  const { base64Image } = req.body;
+
   try {
-   
-    const imageData = req.file.buffer;
+    // Parse the base64 image data and convert it to a Buffer
+    const dataUri = base64Image.split(";base64,");
+    const contentType = dataUri[0].replace("data:", "");
 
-    // Find the note by noteId
-    const existingNote = await Notes.findById(noteId);
+    const buffer = Buffer.from(dataUri[1], "base64");
 
-    if (!existingNote) {
-      return res.status(404).json({ error: "Note not found" });
-    }
+    // Save the Buffer in the MongoDB document
+    const note = await Notes.findById(noteId);
+    note.imageData = {
+      data: buffer,
+      contentType: contentType,
+    };
+    await note.save();
 
-    // Update the existing note with the new drawn note data
-    existingNote.title = title;
-    existingNote.content = content;
-    existingNote.isPinned = isPinned;
-    existingNote.color = color;
-    existingNote.liked = liked;
-    existingNote.user = user;
-    existingNote.imageData = imageData;
-
-    await existingNote.save();
-
-    res.status(200).json({ message: "Drawn note saved successfully" });
-
+    res.status(200).json({ message: "Image saved successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({
