@@ -314,7 +314,7 @@ exports.uploadNote = async (req, res) => {
     const contentType = dataUri[0].replace("data:", "");
 
     const buffer = Buffer.from(dataUri[1], "base64");
-    
+
     const note = await Notes.findById(noteId);
     note.imageData = {
       data: buffer,
@@ -332,9 +332,9 @@ exports.uploadNote = async (req, res) => {
 };
 
 exports.getImage = async (req, res) => {
-  const { noteId } = req.params;
+  const { userId } = req.params;
   try {
-    const note = await Notes.findById(noteId);
+    const note = await Notes.findById(userId);
 
     if (!note || !note.imageData) {
       return res.status(404).json({ error: "Image not found" });
@@ -343,7 +343,7 @@ exports.getImage = async (req, res) => {
     const { data, contentType } = note.imageData;
     const base64Image = `data:${contentType};base64,${data.toString("base64")}`;
 
-    res.json({ base64Image, noteId });
+    res.json({ base64Image });
   } catch (err) {
     res.status(500).json({
       error: "Failed to fetch the note",
