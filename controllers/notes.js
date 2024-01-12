@@ -100,8 +100,6 @@ exports.getNote = async (req, res) => {
       });
     }
 
-    const notes = user.notes;
-
     return res.json(notes);
   } catch (err) {
     console.error(err);
@@ -345,7 +343,7 @@ exports.getImage = async (req, res) => {
     const { data, contentType } = note.imageData;
     const base64Image = `data:${contentType};base64,${data.toString("base64")}`;
 
-    res.json({ base64Image });
+    res.json({ base64Image, noteId });
   } catch (err) {
     res.status(500).json({
       error: "Failed to fetch the note",
