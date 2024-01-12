@@ -100,6 +100,8 @@ exports.getNote = async (req, res) => {
       });
     }
 
+    const notes = user.notes;
+
     return res.json(notes);
   } catch (err) {
     console.error(err);
