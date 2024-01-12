@@ -15,9 +15,6 @@ const {
   uploadNote,
   getImage,
 } = require("../controllers/notes");
-const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 const router = express.Router();
 
@@ -60,5 +57,5 @@ router.patch("/notes/:noteId/color", isSignedin, changeColor);
 router.post("/notes/:noteId/upload", isSignedin, uploadNote);
 
 //fetch the note
-router.get("/notes/:noteId/getImage", isSignedin, getImage);
+router.get("/notes/:userId/getImage", isSignedin, getImage);
 module.exports = router;

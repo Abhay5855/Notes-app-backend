@@ -310,13 +310,11 @@ exports.uploadNote = async (req, res) => {
   const { base64Image } = req.body;
 
   try {
-    // Parse the base64 image data and convert it to a Buffer
     const dataUri = base64Image.split(";base64,");
     const contentType = dataUri[0].replace("data:", "");
 
     const buffer = Buffer.from(dataUri[1], "base64");
-
-    // Save the Buffer in the MongoDB document
+    
     const note = await Notes.findById(noteId);
     note.imageData = {
       data: buffer,
